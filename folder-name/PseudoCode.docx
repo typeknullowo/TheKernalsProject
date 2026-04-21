@@ -1,0 +1,43 @@
+SYSTEM FLOW DIAGRAM:
+[Client Terminal] ----> (Network Connection) ----> [Server] 
+[Server] ----> (Spawns a new Thread) ----> [Client Handler]
+[Client Handler] ----> (Locks & Safely Updates) ----> [Shared Mailbox]
+[Shared Mailbox] ----> (Triggers Save) ----> [Persistence Manager] ----> (Writes to Disk)
+
+
+SERVER SETUP:
+1. Start main program: [Server.java]
+2. [Server] ----> Initializes central [Shared Mailbox]
+3. [Server] ----> Tells [Persistence Manager] to load old messages from disk
+4. Listen for incoming clients.
+5. Loop: When a client connects...
+    a. [Server] ----> Creates a dedicated [Client Handler Thread]
+
+
+CLIENT HANDLER (One Thread runs for each connected user):
+1. Loop: Wait for command from [Client Terminal]
+2. If command is SEND:
+    a. [Client Handler] ----> Locks the [Shared Mailbox]
+    b. [Client Handler] ----> Writes message to the specified users' inboxes inside [Shared Mailbox]
+    c. [Client Handler] ----> Unlocks the [Shared Mailbox]
+    d. [Client Handler] ----> Sends "Message Sent!" back to [Client Terminal]
+3. If command is READ:
+    a. [Client Handler] ----> Locks the [Shared Mailbox]
+    b. [Client Handler] ----> Copies messages from [Shared Mailbox]
+    c. [Client Handler] ----> Unlocks the [Shared Mailbox]
+    d. [Client Handler] ----> Sends formatted messages back to [Client Terminal]
+4. If command is DELETE:
+    a. [Client Handler] ----> Locks the [Shared Mailbox]
+    b. [Client Handler] ----> Removes a message from [Shared Mailbox]
+    c. [Client Handler] ----> Unlocks the [Shared Mailbox]
+    d. [Client Handler] ----> Sends "Message Deleted" back to [Client Terminal]
+
+
+CLIENT TERMINAL (What the user sees):
+1. Start program: [Client.java]
+2. [Client Terminal] ----> Connects to [Server] over the network
+3. Display Menu and Loop:
+    a. User types a command (like SEND or READ)
+    b. [Client Terminal] ----> Sends command string over network to [Client Handler]
+    c. [Client Terminal] <---- Receives the printed response from [Client Handler]
+    d. Show response on screen.
