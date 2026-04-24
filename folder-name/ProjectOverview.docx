@@ -1,0 +1,506 @@
+CS 4440 Product Requirements Document
+Project Name: OS Arena
+Subtitle: A Real-Time Operating System Simulator and Visualizer
+
+1. Product Overview
+OS Arena is an interactive educational simulator that makes core operating system concepts visible in real time. Instead of only reading about CPU scheduling, synchronization, deadlocks, memory allocation, and page replacement, users can build scenarios and watch the OS respond step by step.
+The product is designed for classroom demonstration, technical explanation, and algorithm comparison. It gives users a visual dashboard where they can create processes, assign resources, allocate memory, simulate concurrent execution, and compare the outcomes of different OS algorithms.
+The goal is to turn abstract OS theory into something visual, interactive, and memorable.
+
+2. Situation
+Operating system concepts are some of the hardest topics for students to fully understand because most system behavior happens invisibly. In class, topics like process scheduling, thread synchronization, deadlock handling, and virtual memory are often explained through notes, diagrams, and small examples, but students do not always get to see how all of them connect inside one system.
+Most project ideas only focus on one OS concept at a time, such as sockets, threads, or scheduling. While those projects can work, they often feel narrow and do not show the bigger picture of how an operating system coordinates many components at once.
+OS Arena solves this by combining several course topics into one interactive simulator that demonstrates how an operating system manages competing processes, shared resources, and memory under changing workloads.
+
+3. Customers / Users
+Primary users:
+CS 3337 students
+course instructor and teaching assistants
+student project teams presenting OS concepts
+Secondary users:
+future students studying operating systems
+interviewers or recruiters who want to see a technical systems project
+anyone learning scheduling, deadlocks, or memory management visually
+
+4. Problem Statement
+Students can memorize OS algorithms without fully understanding how they behave in practice. Many concepts are difficult to explain because:
+process state changes happen invisibly
+scheduling decisions are hard to track in real time
+synchronization issues like race conditions are hard to demonstrate clearly
+deadlocks and unsafe states are easier to define than to visualize
+memory allocation and page replacement are often taught as static diagrams rather than dynamic systems
+A strong OS project should not only implement algorithms, but also show why those algorithms matter and what happens when the system is under pressure.
+
+5. Target
+Build a visual simulator that lets users:
+create and run processes and threads
+test multiple CPU scheduling algorithms
+demonstrate synchronization with shared resources
+detect or avoid deadlock using Banker’s Algorithm
+visualize memory allocation and fragmentation
+simulate virtual memory with page replacement policies
+compare algorithm performance through metrics and charts
+The project should be polished enough to impress classmates and the instructor, while still being realistic for a 4-person team.
+
+6. Product Vision
+OS Arena should feel like a live operating system laboratory. Users should be able to create scenarios, start a simulation, and immediately understand what the system is doing and why.
+The experience should answer questions like:
+Why did this process wait so long?
+Why does Round Robin behave differently from FCFS?
+What causes a deadlock?
+Why does LRU often outperform FIFO?
+How does memory fragmentation affect performance?
+What changes when synchronization is turned on or off?
+
+7. Product Goals
+Primary goals
+Demonstrate multiple OS concepts in one unified application
+Make invisible system behavior visible
+Allow side-by-side comparison of algorithms
+Create a strong class presentation and demo experience
+Secondary goals
+Build something interview-worthy
+Practice modular system design in a team setting
+Produce a project that can be extended beyond the class requirements
+
+8. Product Scope
+In scope
+process and thread simulation
+CPU scheduling visualization
+synchronization demonstration
+deadlock prevention or detection
+memory allocation mapping
+virtual memory and page replacement
+metrics dashboard
+preset demo scenarios
+polished UI for classroom presentation
+Out of scope
+building a real operating system kernel
+direct hardware-level memory control
+real CPU execution or kernel-level thread scheduling
+full distributed systems simulation
+production-grade operating system features like file systems, device drivers, or bootloading
+OS Arena is a simulator, not a real OS.
+
+9. Product Options Considered
+Option 1: Narrow Single-Topic Tool
+Build a project focused on one topic only, such as:
+a CPU scheduling visualizer
+a deadlock simulator
+a page replacement simulator
+a thread synchronization demo
+Pros
+easier to build
+simpler testing
+lower development risk
+faster to finish
+Cons
+feels less ambitious
+covers fewer class topics
+less impressive in presentation
+may look similar to projects from previous years
+
+Option 2: Unified Operating System Simulator
+Build one integrated simulator containing:
+process management
+CPU scheduling
+synchronization
+deadlock handling
+memory management
+virtual memory visualization
+Pros
+covers more course material
+looks more advanced and original
+much stronger visual demo
+easier to divide among 4 team members by subsystem
+highly memorable for class presentation
+stronger for portfolios and interviews
+Cons
+more integration work
+requires careful UI and architecture planning
+more complex testing
+risk of becoming too large without clear milestones
+
+10. Proposal
+The team should build Option 2: Unified Operating System Simulator.
+This option best fits the course topics and gives the strongest presentation value. A complete simulator shows not just that the team can implement algorithms, but that the team understands how those algorithms interact inside one system. That makes the project more impressive than a single-topic demo.
+Instead of presenting isolated concepts, OS Arena presents a full systems story:
+processes arrive
+the scheduler chooses what runs
+threads compete for shared resources
+unsafe allocation can create deadlock
+memory fills up and fragments
+page requests trigger replacements
+performance changes depending on algorithm choice
+That full flow is what makes the project stand out.
+
+11. Product Name
+OS Arena
+Possible alternate names:
+Kernel Vision
+Process City
+OS Lab Live
+ScheduSim
+Preferred final name: OS Arena
+
+12. Platform
+Recommended platform:
+Desktop application using Python and PyQt
+Alternative platform:
+Web application using React frontend and Python Flask or Node backend
+Recommended final choice:
+Python + PyQt desktop app
+Reason:
+easier for simulation timing and event control
+strong GUI support
+fast development for a student team
+easier offline demo in class
+easier to build interactive visual components without worrying about server deployment
+
+13. Core User Experience
+A user opens OS Arena and can:
+create a workload of processes
+assign burst times, priorities, resources, and memory needs
+choose a scheduling algorithm
+enable or disable synchronization controls
+allocate resources and observe safe or unsafe states
+run memory allocation and page replacement simulations
+compare metrics after the run
+The system should support:
+play
+pause
+reset
+step-by-step execution
+speed controls
+scenario presets
+
+14. Functional Requirements
+14.1 Process and Thread Management
+The system shall allow users to:
+create processes with ID, arrival time, burst time, priority, memory requirement, and resource needs
+optionally create multiple threads within a process
+display process states:
+New
+Ready
+Running
+Waiting
+Terminated
+display thread states if thread mode is enabled
+show queues visually
+14.2 CPU Scheduling
+The system shall support:
+FCFS
+SJF
+Round Robin
+Priority Scheduling
+The system shall display:
+execution order
+ready queue behavior
+context switches
+Gantt chart
+average waiting time
+turnaround time
+response time
+CPU utilization
+14.3 Synchronization
+The system shall include at least one classic synchronization problem:
+Producer-Consumer
+Dining Philosophers
+Readers-Writers
+The system shall:
+allow a no-lock scenario to demonstrate race conditions
+allow synchronization using mutexes or semaphores
+display blocked, active, and waiting threads
+log resource access events
+14.4 Deadlock / Banker’s Algorithm
+The system shall:
+allow processes to request multiple resources
+maintain available, allocated, and maximum resource matrices
+determine safe and unsafe states
+block or deny unsafe requests when Banker’s Algorithm is enabled
+visualize resource ownership and requests
+display deadlock risk warnings
+14.5 Main Memory Management
+The system shall:
+simulate memory partitions or blocks
+allocate memory to processes
+display free and occupied regions
+show fragmentation
+support strategies such as:
+First Fit
+Best Fit
+Worst Fit
+14.6 Virtual Memory / Page Replacement
+The system shall:
+simulate a page reference string
+display memory frames
+support page replacement algorithms:
+FIFO
+LRU
+Optimal
+show page hits and page faults
+compare fault counts across policies
+14.7 Analytics Dashboard
+The system shall generate performance results such as:
+average waiting time
+average turnaround time
+CPU utilization
+total context switches
+number of page faults
+deadlocks detected or prevented
+synchronization conflicts encountered
+14.8 Preset Scenarios
+The system shall include preset examples such as:
+high CPU contention
+memory pressure
+deadlock-prone resource allocation
+race condition demo
+page thrashing scenario
+
+15. Non-Functional Requirements
+The application should respond smoothly during live simulation
+The interface should be easy to understand during a class presentation
+Visuals should be clean and readable from a classroom screen
+Modules should be loosely coupled so 4 team members can work in parallel
+The system should be stable enough for repeated demos without crashing
+The project should run locally without requiring internet access
+The codebase should be organized and documented for future extension
+
+16. User Interface Requirements
+Main dashboard should include:
+Left panel
+process creation form
+algorithm selectors
+resource configuration controls
+simulation control buttons
+Center panel
+live process queue
+process state visualization
+thread state view
+memory map
+frame display for paging
+Right panel
+metrics summary
+warning messages
+deadlock/safe-state panel
+event log
+Bottom section
+Gantt chart
+algorithm comparison table
+simulation timeline
+UI expectations
+color-coded states
+clear labels
+smooth updates
+readable charts and graphs
+ability to pause and explain during demo
+
+17. Database Content / Internal Data Models
+Even if the system does not use a full external database, it should maintain structured internal data for:
+Process data
+process ID
+arrival time
+burst time
+priority
+current state
+memory requirement
+resource needs
+thread count
+Thread data
+thread ID
+parent process ID
+state
+resource lock status
+Scheduling data
+selected algorithm
+time quantum
+execution timeline
+waiting time
+turnaround time
+response time
+context switch count
+Resource management data
+resource types
+total available resources
+current allocations
+maximum claims
+pending requests
+safe sequence if available
+Memory data
+total memory size
+partition map
+free blocks
+allocated blocks
+fragmentation values
+Virtual memory data
+page reference string
+frame size
+current frame contents
+page hit count
+page fault count
+replacement history
+Reporting data
+scenario name
+timestamp
+algorithm results
+comparison summaries
+
+18. System Integrations
+Because this is a simulator, most integrations are internal rather than external.
+Required internal integrations
+scheduling engine integrated with process manager
+synchronization logic integrated with thread/resource manager
+deadlock detection integrated with resource allocation engine
+memory manager integrated with process creation
+page replacement module integrated with virtual memory panel
+analytics engine integrated with all modules
+Optional external integrations
+These are not required, but could be added later:
+export to CSV or PDF
+save/load scenario files
+optional web deployment for remote demos
+
+19. Key Features That Will Impress the Class
+The features most likely to stand out during presentation are:
+real-time Gantt chart animation
+live switching between FCFS, RR, SJF, and Priority
+showing a race condition, then fixing it with synchronization
+creating an unsafe state and demonstrating Banker’s Algorithm blocking it
+comparing FIFO vs LRU vs Optimal page replacement
+showing memory fragmentation visually
+generating end-of-run performance summaries
+These features make the project feel alive instead of static.
+
+20. Success Metrics
+The project will be considered successful if:
+all core modules work during a live presentation
+users can compare at least 3 scheduling algorithms
+at least 1 synchronization problem is demonstrated clearly
+Banker’s Algorithm correctly identifies safe and unsafe states
+at least 3 page replacement algorithms are implemented
+memory allocation is visualized correctly
+the demo clearly teaches OS concepts, not just displays numbers
+the project is polished enough to feel like a real teaching tool
+
+21. Risks and Mitigations
+Risk 1: Too much scope
+Mitigation:
+finish scheduling, synchronization, and memory basics first
+treat advanced UI polish as secondary until core logic works
+Risk 2: Integration issues between team members
+Mitigation:
+define module interfaces early
+agree on data structures before coding
+hold regular integration checkpoints
+Risk 3: UI becomes cluttered
+Mitigation:
+keep a modular layout
+use tabs or views if needed
+prioritize clarity over flashy visuals
+Risk 4: Demo bugs during presentation
+Mitigation:
+prepare preset scenarios
+include reset button and safe fallback demos
+test each algorithm with known examples
+
+22. Team Roles
+Member 1: Scheduling Lead
+process lifecycle
+FCFS, SJF, RR, Priority
+Gantt chart
+scheduling metrics
+Member 2: Synchronization and Deadlock Lead
+shared resource logic
+mutex/semaphore implementation
+synchronization demo
+Banker’s Algorithm
+deadlock visualization
+Member 3: Memory Lead
+memory allocation
+fragmentation logic
+virtual memory
+page replacement algorithms
+Member 4: UI and Integration Lead
+dashboard design
+event timeline
+algorithm controls
+metrics panel
+combining all modules into one app
+
+23. Development Plan / Milestones
+Phase 1: Planning and architecture
+finalize project scope
+define modules and data structures
+assign responsibilities
+sketch UI layout
+Phase 2: Core simulation logic
+build process manager
+implement scheduling algorithms
+implement synchronization demo
+implement resource manager
+Phase 3: Memory systems
+implement memory allocation
+build fragmentation visualization
+implement page replacement logic
+Phase 4: Integration and UI
+connect subsystems
+build dashboard
+add charts and visual feedback
+create preset workloads
+Phase 5: Testing and presentation
+test correctness with sample scenarios
+refine visuals
+prepare talking points
+practice demo flow
+
+24. Minimum Viable Product
+If time becomes limited, the MVP should include:
+process creation
+FCFS, RR, and Priority scheduling
+one synchronization demo
+Banker’s Algorithm or deadlock detection
+memory map
+FIFO and LRU page replacement
+one integrated dashboard
+This still delivers a strong final presentation.
+
+25. Stretch Goals
+If the group finishes early, add one or more of these:
+Stretch Goal 1: Save and Load Scenarios
+Users can save a custom workload and reopen it later for repeated testing.
+Stretch Goal 2: Report Export
+Generate a PDF or CSV summary of:
+selected algorithms
+performance metrics
+deadlock outcomes
+page fault results
+Stretch Goal 3: Guided Tutorial Mode
+A built-in walkthrough that explains each OS concept as the simulation runs.
+Stretch Goal 4: Multilevel Queue Scheduling
+Add a more advanced scheduler to show deeper OS understanding.
+Stretch Goal 5: Process Dependency Graph
+Visualize parent-child relationships and process dependencies.
+Stretch Goal 6: Socket-Based Remote Viewer
+Allow one machine to control the simulation and another to view it, tying back to sockets from class.
+Stretch Goal 7: Thrashing Detection
+Add a warning mode that detects excessive page faults and explains why the system is thrashing.
+Stretch Goal 8: “What Went Wrong?” Mode
+After a deadlock or race condition occurs, the app explains the cause and how a different algorithm or lock strategy would have prevented it.
+Best stretch goals for presentation value:
+Guided Tutorial Mode
+Report Export
+Socket-Based Remote Viewer
+Thrashing Detection
+
+26. Final Recommendation
+OS Arena should be developed as a real-time interactive OS simulator with visual modules for scheduling, synchronization, deadlock handling, memory allocation, and virtual memory.
+This project is the strongest choice because it:
+covers many topics from the class list
+looks impressive in a live demo
+divides naturally across 4 group members
+proves technical understanding
+is memorable enough to stand out from typical student projects
+
+27. One-Paragraph Proposal Summary
+OS Arena is an interactive operating system simulator designed to visualize how processes, threads, resources, and memory are managed in real time. The application allows users to test CPU scheduling algorithms, demonstrate synchronization and race conditions, detect unsafe resource allocation with Banker’s Algorithm, visualize memory allocation and fragmentation, and compare virtual memory page replacement strategies. By combining several OS concepts into one polished dashboard, the project turns difficult theory into a live, understandable system and provides a strong, presentation-ready final project for CS 3337.
+
