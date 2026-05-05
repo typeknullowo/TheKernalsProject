@@ -119,16 +119,26 @@ class DeadlockTab(QWidget):
         test_container = QFrame()
         test_container.setStyleSheet("background-color: #2d2d2d; border-radius: 8px; padding: 15px;")
         test_layout = QHBoxLayout()
+        test_layout.setSpacing(20) # Added clear spacing
         test_layout.addWidget(QLabel("<b>TEST RESOURCE REQUEST:</b>"))
         
+        proc_layout = QHBoxLayout()
+        proc_layout.setSpacing(10)
         self.combo_proc = QComboBox()
-        test_layout.addWidget(QLabel("Process:"))
-        test_layout.addWidget(self.combo_proc)
+        proc_layout.addWidget(QLabel("Process:"))
+        proc_layout.addWidget(self.combo_proc)
+        test_layout.addLayout(proc_layout)
         
+        vec_layout = QHBoxLayout()
+        vec_layout.setSpacing(10)
         self.line_req = QLineEdit()
         self.line_req.setPlaceholderText("e.g. 1, 0, 2")
-        test_layout.addWidget(QLabel("Vector:"))
-        test_layout.addWidget(self.line_req)
+        self.line_req.setFixedWidth(120)
+        vec_layout.addWidget(QLabel("Vector:"))
+        vec_layout.addWidget(self.line_req)
+        test_layout.addLayout(vec_layout)
+        
+        test_layout.addStretch()
         
         self.btn_test = QPushButton("Submit Request")
         self.btn_test.clicked.connect(self.submit_request)

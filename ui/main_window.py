@@ -49,6 +49,26 @@ class OSArenaGUI(QMainWindow):
             QListWidget::item:hover { background-color: #2d2d30; color: white; }
             QListWidget::item:selected { background-color: #007acc; color: white; }
             
+            /* Dropdown (QComboBox) Styling */
+            QComboBox {
+                background-color: #3e3e42;
+                border: 1px solid #4d4d4d;
+                border-radius: 4px;
+                padding: 5px;
+                color: white;
+                min-width: 100px;
+            }
+            QComboBox::drop-down {
+                border: none;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #252526;
+                color: white;
+                selection-background-color: #007acc;
+                border: 1px solid #3e3e42;
+                outline: none;
+            }
+            
             /* Generic Button Styling */
             QPushButton {
                 background-color: #3e3e42;
